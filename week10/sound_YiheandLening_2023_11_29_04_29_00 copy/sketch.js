@@ -65,6 +65,8 @@ function setup() {
  
 }
 
+
+
 //和弦时间太短可能会出bug
 function playChord(chordNotes, type) {
     let now = Tone.now();
@@ -109,18 +111,18 @@ function draw() {
         block.update();
         block.draggableblockDraw();
 
-        // 对于每条移动线，检查是否与方块重叠
-        movingLines1.forEach(line => {
-            if (line.x3 > block.x && line.x3 < block.x + block.w) {
-                block.playChord();
+        // // 对于每条移动线，检查是否与方块重叠
+        // movingLines1.forEach(line => {
+        //     if (line.x3 > block.x && line.x3 < block.x + block.w) {
+        //         block.playChord();
                 
-            }
-        });
-        movingLines2.forEach(line => {
-            if (line.x4 > block.x && line.x4 < block.x + block.w) {
-                block.playChord();
-            }
-        });
+        //     }
+        // });
+        // movingLines2.forEach(line => {
+        //     if (line.x4 > block.x && line.x4 < block.x + block.w) {
+        //         block.playChord();
+        //     }
+        // });
     });
     
     // 更新和绘制移动的线
@@ -173,13 +175,13 @@ class DraggableBlock {
 
         // 检查是否和任何移动线重叠
         movingLines1.forEach(line => {
-            if (line.x3 > this.x && line.x3 < this.x + this.w) {
+            if (line.x3 > this.x && line.x3 < this.x + this.w && line.y1 > this.y && line.y2 <this.y + this.h*2) {
                 this.playChord();
             }
         });
 
         movingLines2.forEach(line => {
-            if (line.x4 > this.x && line.x4 < this.x + this.w) {
+            if (line.x4 > this.x && line.x4 < this.x + this.w && line.y1 > this.y && line.y2 <this.y + this.h*2) {
                 this.playChord();
             }
         });
@@ -190,9 +192,6 @@ class DraggableBlock {
     // 更新方块状态
   update() {
     
-
-
-
     let overLeftEdge = mouseX > this.x && mouseX < this.x + this.resizeMargin;
     let overRightEdge = mouseX > this.x + this.w - this.resizeMargin && mouseX < this.x + this.w;
     let overVerticalRange = mouseY > this.y && mouseY < this.y + this.h;
@@ -320,6 +319,7 @@ class DraggableBlock {
 
         
 }
+
 
 
 function initializeBlocks() {
