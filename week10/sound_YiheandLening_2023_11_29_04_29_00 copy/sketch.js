@@ -65,8 +65,6 @@ function setup() {
  
 }
 
-
-
 //和弦时间太短可能会出bug
 function playChord(chordNotes, type) {
     let now = Tone.now();
@@ -165,13 +163,13 @@ class DraggableBlock {
   
     draggableblockDraw() {
         // 绘制方块
-        stroke(0);
-        fill(255, 0, 0);
-        rect(this.x, this.y, this.w, this.h);
+        noStroke();
+        fill(255, 0, 20);
+        rect(this.x, this.y, this.w, this.h*2);
 
         // 显示和弦
         fill(255);
-        text(this.chord, this.x + this.w / 2, this.y + this.h / 2);
+        text(this.chord, this.x + this.w / 3, this.y + this.h*4/3 );
 
         // 检查是否和任何移动线重叠
         movingLines1.forEach(line => {
@@ -191,9 +189,14 @@ class DraggableBlock {
   
     // 更新方块状态
   update() {
+    
+
+
+
     let overLeftEdge = mouseX > this.x && mouseX < this.x + this.resizeMargin;
     let overRightEdge = mouseX > this.x + this.w - this.resizeMargin && mouseX < this.x + this.w;
     let overVerticalRange = mouseY > this.y && mouseY < this.y + this.h;
+    let insideBlock = mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h;
   
     // 如果正在调整大小
     if (this.resizingRight) {
@@ -212,7 +215,10 @@ class DraggableBlock {
       this.y = mouseY + this.dragOffsetY;
     }
   
-    return overLeftEdge && overVerticalRange || overRightEdge && overVerticalRange;
+    return {
+        isOverEdge: (overLeftEdge || overRightEdge) && overVerticalRange,
+        isInside: insideBlock
+      };
   }
   
     // 处理鼠标按下事件
@@ -299,25 +305,21 @@ class DraggableBlock {
 
     draw1() {
         if (this.moving) {
-            stroke(255, 0, 0);
+            strokeWeight(4);
+            stroke(0, 0, 255);
             line(this.x3, this.y1, this.x3, this.y2);
         }
     }
     draw2() {
         if (this.moving) {
-            stroke(255, 0, 0);
+            strokeWeight(4);
+            stroke(0, 0, 255);
             line(this.x4, this.y1, this.x4, this.y2);
         }
     }
 
         
 }
-
-
-
-
-
-
 
 
 function initializeBlocks() {
@@ -342,13 +344,21 @@ function initializeBlocks() {
   }
   function updateCursorForBlocks() {
     let cursorUpdated = false;
+  
     for (let block of blocks) {
-      if (block.update()) {
+      let result = block.update();
+  
+      if (result.isOverEdge) {
         cursor('ew-resize');
+        cursorUpdated = true;
+        break;
+      } else if (result.isInside) {
+        cursor('move');
         cursorUpdated = true;
         break;
       }
     }
+  
     if (!cursorUpdated) {
       cursor('default');
     }
