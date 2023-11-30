@@ -96,8 +96,8 @@ document.getElementById('startLines').addEventListener('click', function() {
 function draw() {
     createCanvas(windowWidth, windowHeight);
     background(img);
-    stroke(0);
-    strokeWeight(1);
+    stroke(255);
+    strokeWeight(4);
 
     // line devide screen
     line(0, windowHeight / 2, windowWidth, windowHeight / 2);
