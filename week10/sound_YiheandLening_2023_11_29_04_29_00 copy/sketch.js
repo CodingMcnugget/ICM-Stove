@@ -44,10 +44,9 @@ function setup() {
         
     ];
 
-    // 定义音符（C大调音阶）
-    const notes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5'];
 
-    // 初始化振荡器
+    const notes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5'];
+   
     const types = ['sine', 'square', 'triangle', 'sawtooth'];
     types.forEach(type => {
         oscillators[type] = notes.reduce((acc, note) => {
